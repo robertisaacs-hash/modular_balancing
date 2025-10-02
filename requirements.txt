@@ -1,0 +1,9 @@
+# modular_balancing/requirements.txt
+pandas
+numpy
+google-cloud-bigquery
+google-cloud-storage
+pulp
+matplotlib
+seaborn
+python-dotenv # For loading environment variables from .env
