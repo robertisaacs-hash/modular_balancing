@@ -69,21 +69,25 @@ def load_from_gcs_pickle(gcs_path: str) -> pd.DataFrame:
         return pd.DataFrame()
 
 def ensure_gcs_bucket_exists(bucket_name: str, location: str):
-    """Creates a GCS bucket if it doesn't exist, or confirms its existence."""
     if storage_client is None:
         initialize_gcp_clients()
-    print(f"Attempting to create or get GCS Bucket: gs://{bucket_name}")
+    print(f"Attempting to access GCS Bucket: gs://{bucket_name}")
+    from google.api_core import exceptions
     try:
-        bucket = storage_client.create_bucket(bucket_name, location=location)
-        print(f"✅ Bucket '{bucket_name}' created successfully in '{location}'.")
+        # Try to access first
+        bucket = storage_client.get_bucket(bucket_name)
+        print(f"ℹ️ Bucket '{bucket_name}' already exists and is accessible.")
         return bucket
-    except exceptions.Conflict:
-        bucket = storage_client.get_bucket(bucket_name) # Ensure we get the bucket object
-        print(f"ℹ️ Bucket '{bucket_name}' already exists.")
-        return bucket
+    except exceptions.NotFound:
+        print(f"ℹ️ Bucket '{bucket_name}' not found. Attempting to create...")
+        try:
+            bucket = storage_client.create_bucket(bucket_name, location=location)
+            print(f"✅ Bucket '{bucket_name}' created successfully in '{location}'.")
+            return bucket
+        except exceptions.Forbidden:
+            print("🚨 Permission denied while creating bucket. Ask for pre-create or grant 'storage.buckets.create'.")
+            return None
     except exceptions.Forbidden:
-        print(f"🚨 Permission denied: Ensure the service account or user has 'Storage Admin' or 'Storage Object Creator' roles in project '{PROJECT_ID_SHRNK}'.")
+        print("🚨 Permission denied accessing bucket. Grant 'Storage Object Admin' (bucket-level) to this service account.")
         return None
-    except Exception as e:
-        print(f"🚨 An unexpected error occurred while accessing GCS bucket: {e}")
-        return None
+
