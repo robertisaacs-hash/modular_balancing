@@ -134,13 +134,13 @@ MAX_PROBABLE_NM_STORES_PER_WEEK: This is a key heuristic for the Neighborhood Ma
 RELAY_HOURS_COL: Confirmed as "Total_Store_Hours".
 SEASONAL_DESC_VALUE, DC_REALIGN_DESC_VALUE: Confirmed values from Short_Desc column.
 ## 7. Usage 
-    ## Running the Pipeline
+* ## Running the Pipeline
 From the root of your project directory (modular_balancing), execute the main.py script:
 
 ```
 python src/main.py
 ```
-    ## Pipeline Execution Flags
+* ## Pipeline Execution Flags
 The run_full_pipeline function in src/main.py accepts several flags to control its execution, useful for development and debugging:
 
 use_mock_data (default: False):
