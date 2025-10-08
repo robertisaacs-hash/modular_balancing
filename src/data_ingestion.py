@@ -6,10 +6,12 @@ from datetime import datetime, timedelta
 
 from src.utils import get_bigquery_data, save_to_gcs_pickle
 from src.config import (
-    PROJECT_ID_SHRNK, PROJECT_ID_AP,ONE_YEAR_AGO, FUTURE_DATE_BUFFER_WEEKS,
+    PROJECT_ID_SHRNK, PROJECT_ID_AP, ONE_YEAR_AGO, FUTURE_DATE_BUFFER_WEEKS,
     BQ_RELAYS_TABLE_ID, BQ_MSA_TABLE_ID, BQ_OVERACTIVE_BRIDGE_TABLE_ID,
-    GCS_DATA_PATH, RELAY_HOURS_COL, SEASONAL_DESC_VALUE, DC_REALIGN_DESC_VALUE
+    GCS_DATA_PATH, RELAY_HOURS_COL, SEASONAL_DESC_VALUE, DC_REALIGN_DESC_VALUE,
+    TIME_WINDOW_DAYS
 )
+
 
 
 def _generate_mock_relays(num_relays=1000):

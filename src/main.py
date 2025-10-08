@@ -8,7 +8,13 @@ load_dotenv()
 
 # Initialize GCP clients early
 from src.utils import initialize_gcp_clients, ensure_gcs_bucket_exists, load_from_gcs_pickle
-from src.config import GCS_BUCKET_NAME, GCP_LOCATION
+from src.config import (
+    GCS_BUCKET_NAME,
+    GCP_LOCATION,
+    GCS_DATA_PATH,
+    GCS_MODELS_PATH
+)
+
 
 initialize_gcp_clients()
 
