@@ -106,7 +106,7 @@ pip install -r requirements.txt
 
 ## 6. Setup & Configuration
 
-GCP Service Account Credentials
+## GCP Service Account Credentials
 Place your JSON key file: Move your downloaded service account JSON key file to a secure location on your machine.
 
 Configure .env: Create a file named .env in the root of your modular_balancing project directory and add the following line, replacing /path/to/your/service_account_key.json with the absolute path to your file:
@@ -116,12 +116,12 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service_account_key.json
 ```
 SECURITY WARNING: granularize roles. Do NOT commit gcp_key.json or your .env file to version control. Add *.json and .env to your .gitignore.
 
-GCS Bucket Creation
+## GCS Bucket Creation
 Before running the pipeline, ensure your dedicated GCS bucket is created. The pipeline's utility functions will attempt to create it if it doesn't exist.
 
 Verify Bucket Name: In src/config.py, ensure GCS_BUCKET_NAME is set to a globally unique name (e.g., wmt-us-gg-shrnk-prod-modrelaybalancing-data).
 Initial Run: The first time you run src/main.py, it will check for/create the bucket.
-Configuration File (src/config.py)
+## Configuration File (src/config.py)
 Review and adjust the parameters in src/config.py to match your exact environment and business requirements:
 
 PROJECT_ID_SHRNK, PROJECT_ID_AP, GCP_LOCATION: Confirm these are correct for your Google Cloud setup.
@@ -134,13 +134,13 @@ MAX_PROBABLE_NM_STORES_PER_WEEK: This is a key heuristic for the Neighborhood Ma
 RELAY_HOURS_COL: Confirmed as "Total_Store_Hours".
 SEASONAL_DESC_VALUE, DC_REALIGN_DESC_VALUE: Confirmed values from Short_Desc column.
 ## 7. Usage 
-Running the Pipeline
+## Running the Pipeline
 From the root of your project directory (modular_balancing), execute the main.py script:
 
 ```
 python src/main.py
 ```
-Pipeline Execution Flags
+## Pipeline Execution Flags
 The run_full_pipeline function in src/main.py accepts several flags to control its execution, useful for development and debugging:
 
 use_mock_data (default: False):
