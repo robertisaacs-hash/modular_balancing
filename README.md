@@ -47,7 +47,7 @@ The core objective is to ensure that modular relay activity within any given wee
 
 The application follows a modular, pipeline-based architecture implemented in Python.
 
-```
+```mermaid
 graph TD
     A[GCP BigQuery Data Sources] --> B{Data Ingestion Layer};
     B -- Raw Data (GCS) --> C{Feature Engineering Layer};
