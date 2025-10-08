@@ -138,7 +138,7 @@ Review and adjust the parameters in src/config.py to match your exact environmen
 From the root of your project directory (modular_balancing), execute the main.py script:
 
 ```
-python src/main.py
+python -m src.main
 ```
 * ## Pipeline Execution Flags
 The run_full_pipeline function in src/main.py accepts several flags to control its execution, useful for development and debugging:
