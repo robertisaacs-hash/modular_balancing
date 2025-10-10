@@ -51,37 +51,36 @@ def _generate_mock_relays(num_relays=1000):
     return df
 
 
-def _generate_mock_msa(num_msa_records=500, relay_ids_for_linking=None):
-    print("Generating mock df_msa data...")
-    current_date_dt = datetime.now()
-    future_date_dt = current_date_dt + timedelta(weeks=FUTURE_DATE_BUFFER_WEEKS)
-    wk_end_dates = pd.to_datetime(pd.date_range(start=ONE_YEAR_AGO, end=future_date_dt, freq='W'))
+def _generate_mock_msa(relay_ids_for_linking=None, n_rows=500):
+    import numpy as np
+    import pandas as pd
 
-    mod_types = ['Standard', 'Small Format', 'Large Format']
-    
-    # Generate Store_IDs ensuring some overlap with actual/mock relays
-    if relay_ids_for_linking is not None and not relay_ids_for_linking.empty:
-         # Assuming relay_ids_for_linking has 'Store_ID'
-         stores_used_in_relays = relay_ids_for_linking['Store_ID'].unique()
-         mock_store_ids = np.concatenate((
-             stores_used_in_relays,
-             np.arange(max(map(int, stores_used_in_relays)) + 1, max(map(int, stores_used_in_relays)) + 51).astype(str)
-         ))
-         mock_store_ids = np.unique(mock_store_ids) # Remove duplicates
+    # Try to detect a store column from relays; fall back to random stores
+    candidate_cols = ["Store_ID", "Store", "store_id", "store"]
+    stores_series = None
+    if relay_ids_for_linking is not None and isinstance(relay_ids_for_linking, pd.DataFrame):
+        for c in candidate_cols:
+            if c in relay_ids_for_linking.columns:
+                stores_series = relay_ids_for_linking[c].dropna()
+                break
+
+    if stores_series is None or stores_series.empty:
+        # fallback: synthesize a pool of stores
+        stores_pool = [str(s) for s in range(1001, 1201)]  # or use TEST_STORES if you have it
     else:
-        mock_store_ids = np.arange(1001, 1051).astype(str) # 50 stores
+        stores_pool = stores_series.astype(str).unique().tolist()
 
-    data = {
-        'Mod_ID': np.arange(10001, 10001 + num_msa_records).astype(str),
-        'Store': np.random.choice(mock_store_ids, num_msa_records, replace=True), # 'Store' column for Store_ID
-        'Mod_Eff_Date': np.random.choice(wk_end_dates, num_msa_records),
-        'Mod_Type': np.random.choice(mod_types, num_msa_records),
-        'Store_Type': np.random.choice(['Neighborhood Market', 'Supercenter', 'Division 1'], num_msa_records, p=[0.2, 0.7, 0.1]),
-    }
-    df = pd.DataFrame(data)
-    df['Mod_Eff_Date'] = pd.to_datetime(df['Mod_Eff_Date'])
-    df['Store'] = df['Store'].astype(str)
-    return df
+    # … then use stores_pool to build df_msa
+    # example:
+    rng = np.random.default_rng(42)
+    df_msa = pd.DataFrame({
+        "Mod_ID": rng.integers(10_000, 99_999, size=n_rows),
+        "Store": rng.choice(stores_pool, size=n_rows),
+        "Mod_Eff_Date": pd.to_datetime("today").normalize() - pd.to_timedelta(rng.integers(0, 120, size=n_rows), unit="D"),
+        "Mod_Type": rng.choice(["Reset","New","Pull","Replace"], size=n_rows),
+        "Store_Type": rng.choice(["Supercenter","Neighborhood","Sam's"], size=n_rows),
+    })
+    return df_msa
 
 def _generate_mock_overactive_bridge(df_relays_raw, df_msa_raw):
     print("Generating mock df_overactive_bridge data...")
