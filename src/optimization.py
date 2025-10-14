@@ -3,7 +3,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from pulp import *
+from pulp import LpProblem, LpMinimize, LpVariable, LpBinary, lpSum, PULP_CBC_CMD, LpStatus
 
 
 from src.utils import save_to_gcs_pickle
@@ -45,35 +45,66 @@ def solve_optimization_problem(df_processed: pd.DataFrame):
     print("Pre-fix duplicate rows:", dupe_mask.sum())
 
         # --- build a truly unique instance key and ensure uniqueness ---
+
+    # For visibility before fixing
+    dupe_mask = df_optim_scope.duplicated(
+        ['Relay_ID', 'Store_ID', 'Original_WK_End_Date'], keep=False
+    )
+    print("Pre-fix duplicate rows:", int(dupe_mask.sum()))
+
+    # 1) Normalize Original_WK_End_Date to datetime
     if not pd.api.types.is_datetime64_any_dtype(df_optim_scope['Original_WK_End_Date']):
         df_optim_scope['Original_WK_End_Date'] = pd.to_datetime(
             df_optim_scope['Original_WK_End_Date'], errors='coerce'
         )
 
+    # 2) Build the composite key: Relay + Store + Original Week
     df_optim_scope['Relay_Store_Instance_ID'] = (
         df_optim_scope['Relay_ID'].astype(str).str.strip() + '_' +
         df_optim_scope['Store_ID'].astype(str).str.strip() + '_' +
         df_optim_scope['Original_WK_End_Date'].dt.strftime('%Y-%m-%d').fillna('NA')
     )
 
-    # Prefer rows with a requested move/date/higher impact, then drop dup keys
+    # 3) Prefer rows with explicit moves / higher impact, then drop exact dup keys
     sort_cols = [c for c in ['Requested_Move_WK', 'WK_End_Date', 'Relay_Change_Perc', 'Total_Store_Hours']
                  if c in df_optim_scope.columns]
     if sort_cols:
         df_optim_scope = df_optim_scope.sort_values(sort_cols, ascending=False)
 
+    # Drop exact duplicates of the ID, keep the “best” row
     df_optim_scope = df_optim_scope.drop_duplicates(
         subset='Relay_Store_Instance_ID', keep='first'
     )
 
-    # Final guard (should be unique now)
+    # 4) If any keys are STILL duplicated (e.g., because they were '..._NA'),
+    # suffix a counter deterministically to make them unique without dropping data.
+    if not df_optim_scope['Relay_Store_Instance_ID'].is_unique:
+        order = df_optim_scope.groupby('Relay_Store_Instance_ID').cumcount()
+        dup_mask2 = order > 0
+        df_optim_scope.loc[dup_mask2, 'Relay_Store_Instance_ID'] = (
+            df_optim_scope.loc[dup_mask2, 'Relay_Store_Instance_ID'] + '_' + order[dup_mask2].astype(str)
+        )
+
+    # Final guardrail (fails fast with a preview if somehow still duplicated)
     if not df_optim_scope['Relay_Store_Instance_ID'].is_unique:
         counts = df_optim_scope['Relay_Store_Instance_ID'].value_counts()
         raise ValueError(
             "Non-unique Relay_Store_Instance_ID after normalization. Examples:\n"
             + counts[counts > 1].head(10).to_string()
         )
-    # --- end uniqueness block ---
+
+    # 5) Define sets and lookup dict **from the deduped view**
+    RELAY_INSTANCES = df_optim_scope['Relay_Store_Instance_ID'].tolist()
+    WEEKS = sorted(list(set(valid_target_weeks_dt.tolist())))
+    WEEKS_STR = [w.strftime('%Y-%m-%d') for w in WEEKS]
+
+    # IMPORTANT: build the properties dict from the unique view
+    relay_instance_properties = (
+        df_optim_scope
+        .set_index('Relay_Store_Instance_ID')   # now guaranteed unique
+        .to_dict('index')
+    )
+
 
 
     RELAY_INSTANCES = df_optim_scope['Relay_Store_Instance_ID'].unique().tolist()

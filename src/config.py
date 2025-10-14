@@ -26,17 +26,17 @@ ONE_YEAR_AGO = (datetime.now() - timedelta(days=TIME_WINDOW_DAYS)).strftime('%Y-
 FUTURE_DATE_BUFFER_WEEKS = 12 # How many weeks into the future to consider for relay moves
 
 # --- Optimization Thresholds & Parameters ---
-TOTAL_WEEKLY_HOURS_THRESHOLD = 500000
-NM_AVG_HOURS_THRESHOLD = 40.0
+TOTAL_WEEKLY_HOURS_THRESHOLD = 1000000  # Increased to allow more flexibility
+NM_AVG_HOURS_THRESHOLD = 100.0    # Increased to allow more NM hours
 
 # Holiday thresholds (example - confirm with manager)
-HOLIDAY_TOTAL_WEEKLY_HOURS_THRESHOLD = 450000 # Example: 10% lower
-HOLIDAY_NM_AVG_HOURS_THRESHOLD = 35.0 # Example: 10% lower
+HOLIDAY_TOTAL_WEEKLY_HOURS_THRESHOLD = 900000 # Lowered penalty to allow threshold breach
+HOLIDAY_NM_AVG_HOURS_THRESHOLD = 90.0 # Example: 10% lower
 
 # Cost/Penalties for Optimization (Tune these based on business priorities)
-PENALTY_OVER_TOTAL_HOURS = 1000 # High penalty for exceeding main threshold
-PENALTY_OVER_NM_HOURS_PROXY = 500 # High penalty for exceeding NM total hours proxy
-COST_PER_RELAY_MOVE = 1 # Cost for moving a single relay
+PENALTY_OVER_TOTAL_HOURS = 10 # Lower penalty to allow threshold breaches
+PENALTY_OVER_NM_HOURS_PROXY = 10 # Lower penalty 
+COST_PER_RELAY_MOVE = 0.1 # Cost for moving a single relay
 # For NM avg, we need a proxy for the total hours. This assumes a max number of NM stores
 # that typically have relays in a week. Needs to be validated from real data.
 MAX_PROBABLE_NM_STORES_PER_WEEK = 20
