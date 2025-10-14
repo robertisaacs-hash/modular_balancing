@@ -15,7 +15,6 @@ from src.config import (
     MAX_PROBABLE_NM_STORES_PER_WEEK
 )
 
-
 def solve_optimization_problem(df_processed: pd.DataFrame):
     """
     Defines and solves the modular relay balancing optimization problem using PuLP.
@@ -42,16 +41,48 @@ def solve_optimization_problem(df_processed: pd.DataFrame):
     if valid_target_weeks_dt.empty:
         print("No valid target weeks for optimization found.")
         return pd.DataFrame()
+    dupe_mask = df_optim_scope.duplicated(['Relay_ID','Store_ID','Original_WK_End_Date'], keep=False)
+    print("Pre-fix duplicate rows:", dupe_mask.sum())
 
-    # Index relays by a unique combination of Relay_ID and Store_ID as these are the scheduling units
-    df_optim_scope['Relay_Store_Instance_ID'] = df_optim_scope['Relay_ID'] + '_' + df_optim_scope['Store_ID']
+        # --- build a truly unique instance key and ensure uniqueness ---
+    if not pd.api.types.is_datetime64_any_dtype(df_optim_scope['Original_WK_End_Date']):
+        df_optim_scope['Original_WK_End_Date'] = pd.to_datetime(
+            df_optim_scope['Original_WK_End_Date'], errors='coerce'
+        )
+
+    df_optim_scope['Relay_Store_Instance_ID'] = (
+        df_optim_scope['Relay_ID'].astype(str).str.strip() + '_' +
+        df_optim_scope['Store_ID'].astype(str).str.strip() + '_' +
+        df_optim_scope['Original_WK_End_Date'].dt.strftime('%Y-%m-%d').fillna('NA')
+    )
+
+    # Prefer rows with a requested move/date/higher impact, then drop dup keys
+    sort_cols = [c for c in ['Requested_Move_WK', 'WK_End_Date', 'Relay_Change_Perc', 'Total_Store_Hours']
+                 if c in df_optim_scope.columns]
+    if sort_cols:
+        df_optim_scope = df_optim_scope.sort_values(sort_cols, ascending=False)
+
+    df_optim_scope = df_optim_scope.drop_duplicates(
+        subset='Relay_Store_Instance_ID', keep='first'
+    )
+
+    # Final guard (should be unique now)
+    if not df_optim_scope['Relay_Store_Instance_ID'].is_unique:
+        counts = df_optim_scope['Relay_Store_Instance_ID'].value_counts()
+        raise ValueError(
+            "Non-unique Relay_Store_Instance_ID after normalization. Examples:\n"
+            + counts[counts > 1].head(10).to_string()
+        )
+    # --- end uniqueness block ---
+
 
     RELAY_INSTANCES = df_optim_scope['Relay_Store_Instance_ID'].unique().tolist()
     WEEKS = sorted(list(set(valid_target_weeks_dt.tolist()))) # Sorted list of unique datetime objects
     WEEKS_STR = [w.strftime('%Y-%m-%d') for w in WEEKS] # String representation for PuLP keys
 
     # Create a dictionary for quick lookup of relay instance properties
-    relay_instance_properties = df_optim_scope.set_index('Relay_Store_Instance_ID').to_dict('index')
+    dedup = df_optim_scope.drop_duplicates('Relay_Store_Instance_ID', keep='first')
+    relay_instance_properties = dedup.set_index('Relay_Store_Instance_ID').to_dict('index')
 
     # Get all unique Relay_IDs from these instances for adjacency handling
     all_relay_ids_in_scope = df_optim_scope['Relay_ID'].unique().tolist()
