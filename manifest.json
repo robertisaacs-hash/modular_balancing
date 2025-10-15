@@ -1,0 +1,317 @@
+{
+  "version": 1,
+  "locale": "en_US.UTF-8",
+  "metadata": {
+    "appmode": "python-flask",
+    "entrypoint": "app:app"
+  },
+  "python": {
+    "version": "3.9.0",
+    "package_manager": {
+      "name": "pip",
+      "version": "21.0.0"
+    }
+  },
+  "title": "Modular Relay Analysis Dashboard",
+  "description": "Interactive dashboard for optimizing store workload distribution and merchant request management through intelligent relay scheduling analysis.",
+  "tags": [
+    "walmart",
+    "optimization",
+    "analytics",
+    "dashboard",
+    "retail",
+    "operations",
+    "modular",
+    "relay",
+    "shrink-intelligence"
+  ],
+  "access_type": "logged_in",
+  "run_as": "visitor",
+  "environment": {
+    "FLASK_ENV": "production",
+    "FLASK_DEBUG": "false",
+    "PYTHONPATH": "/opt/python/current/bin/python",
+    "LANG": "en_US.UTF-8",
+    "LC_ALL": "en_US.UTF-8",
+    "TZ": "America/Chicago"
+  },
+  "files": {
+    "app.py": {
+      "checksum": "auto"
+    },
+    "src/": {
+      "checksum": "auto"
+    },
+    "static/": {
+      "checksum": "auto"
+    },
+    "templates/": {
+      "checksum": "auto"
+    },
+    "requirements.txt": {
+      "checksum": "auto"
+    }
+  },
+  "quarto": null,
+  "jupyter": null,
+  "api": null,
+  "has_parameters": false,
+  "app_role": null,
+  "default_image": null,
+  "default_r_environment_management": null,
+  "default_py_environment_management": "pip",
+  "r": null,
+  "scheduling": {
+    "start": true,
+    "restart": "always",
+    "idle_timeout": 3600,
+    "max_processes": 5,
+    "min_processes": 1,
+    "max_conns_per_process": 20,
+    "load_factor": 0.5
+  },
+  "resource_limits": {
+    "cpu_request": "0.5",
+    "cpu_limit": "2.0",
+    "memory_request": "1Gi",
+    "memory_limit": "4Gi"
+  },
+  "health_check": {
+    "enabled": true,
+    "path": "/api/health",
+    "timeout": 30,
+    "interval": 60,
+    "success_threshold": 1,
+    "failure_threshold": 3
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "max_size": "100MB",
+    "backup_count": 3
+  },
+  "security": {
+    "content_security_policy": {
+      "enabled": true,
+      "directives": {
+        "default-src": "'self'",
+        "script-src": "'self' 'unsafe-inline' 'unsafe-eval' cdn.plot.ly cdn.jsdelivr.net cdnjs.cloudflare.com",
+        "style-src": "'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com fonts.googleapis.com",
+        "font-src": "'self' cdnjs.cloudflare.com fonts.gstatic.com",
+        "img-src": "'self' data: cdn.plot.ly",
+        "connect-src": "'self'",
+        "frame-ancestors": "'none'",
+        "base-uri": "'self'",
+        "form-action": "'self'"
+      }
+    },
+    "force_https": true,
+    "session_timeout": 28800,
+    "csrf_protection": true
+  },
+  "permissions": {
+    "required": [
+      "view_content",
+      "view_logs"
+    ],
+    "admin": [
+      "edit_content",
+      "change_permissions",
+      "view_process_logs"
+    ]
+  },
+  "deployment": {
+    "strategy": "rolling",
+    "max_unavailable": 1,
+    "readiness_probe": {
+      "path": "/api/health",
+      "initial_delay": 30,
+      "period": 10,
+      "timeout": 5,
+      "success_threshold": 1,
+      "failure_threshold": 3
+    },
+    "liveness_probe": {
+      "path": "/api/health",
+      "initial_delay": 60,
+      "period": 30,
+      "timeout": 10,
+      "success_threshold": 1,
+      "failure_threshold": 5
+    }
+  },
+  "monitoring": {
+    "metrics": {
+      "enabled": true,
+      "path": "/metrics",
+      "include_default": true
+    },
+    "performance": {
+      "track_response_time": true,
+      "track_memory_usage": true,
+      "track_cpu_usage": true,
+      "alert_thresholds": {
+        "response_time_ms": 5000,
+        "memory_usage_percent": 85,
+        "cpu_usage_percent": 80,
+        "error_rate_percent": 5
+      }
+    }
+  },
+  "data_sources": {
+    "bigquery": {
+      "enabled": true,
+      "connection_pooling": true,
+      "max_connections": 10,
+      "timeout": 300
+    },
+    "gcs": {
+      "enabled": true,
+      "cache_enabled": true,
+      "cache_ttl": 3600
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "type": "memory",
+    "max_size": "512MB",
+    "ttl": 3600,
+    "compression": true
+  },
+  "features": {
+    "auto_refresh": {
+      "enabled": true,
+      "interval": 300
+    },
+    "real_time_updates": {
+      "enabled": true
+    },
+    "export_capabilities": {
+      "enabled": true,
+      "formats": ["pdf", "png", "csv", "xlsx"]
+    },
+    "mock_data_mode": {
+      "enabled": true,
+      "default": true
+    },
+    "advanced_analytics": {
+      "enabled": true,
+      "machine_learning": true,
+      "predictive_modeling": true
+    }
+  },
+  "ui": {
+    "theme": "walmart",
+    "responsive": true,
+    "accessibility": true,
+    "internationalization": false,
+    "custom_branding": {
+      "logo_url": "/static/images/walmart-logo.png",
+      "favicon_url": "/static/images/favicon.ico",
+      "primary_color": "#004c91",
+      "secondary_color": "#0071ce"
+    }
+  },
+  "integrations": {
+    "posit_connect": {
+      "version": "2023.10.0",
+      "features": [
+        "scheduled_reports",
+        "email_notifications",
+        "user_authentication",
+        "content_management"
+      ]
+    },
+    "external_apis": {
+      "enabled": false,
+      "rate_limiting": true
+    }
+  },
+  "backup": {
+    "enabled": true,
+    "schedule": "0 2 * * *",
+    "retention_days": 30,
+    "include_logs": true,
+    "include_cache": false
+  },
+  "notifications": {
+    "email": {
+      "enabled": true,
+      "smtp_server": "smtp.walmart.com",
+      "port": 587,
+      "use_tls": true,
+      "alerts": [
+        "high_error_rate",
+        "performance_degradation",
+        "data_quality_issues",
+        "system_failures"
+      ]
+    },
+    "slack": {
+      "enabled": false
+    }
+  },
+  "compliance": {
+    "data_governance": {
+      "enabled": true,
+      "data_classification": "internal",
+      "retention_policy": "7_years",
+      "encryption_at_rest": true,
+      "encryption_in_transit": true
+    },
+    "audit_logging": {
+      "enabled": true,
+      "include_user_actions": true,
+      "include_data_access": true,
+      "retention_days": 2555
+    },
+    "privacy": {
+      "pii_handling": "compliant",
+      "data_anonymization": true,
+      "consent_management": false
+    }
+  },
+  "documentation": {
+    "user_guide_url": "/static/docs/user_guide.html",
+    "api_documentation_url": "/static/docs/api.html",
+    "technical_documentation_url": "/static/docs/technical.html",
+    "changelog_url": "/static/docs/changelog.html"
+  },
+  "support": {
+    "contact_email": "shrink-intelligence@walmart.com",
+    "help_desk_url": "https://walmart.service-now.com",
+    "documentation_url": "https://confluence.walmart.com/modular-relay-docs",
+    "escalation_contacts": [
+      "shrink-analytics-team@walmart.com",
+      "retail-operations-support@walmart.com"
+    ]
+  },
+  "versioning": {
+    "semantic_versioning": true,
+    "current_version": "1.0.0",
+    "minimum_compatible_version": "1.0.0",
+    "auto_update": false,
+    "rollback_enabled": true
+  },
+  "testing": {
+    "unit_tests": {
+      "enabled": true,
+      "coverage_threshold": 80
+    },
+    "integration_tests": {
+      "enabled": true,
+      "environment": "staging"
+    },
+    "performance_tests": {
+      "enabled": true,
+      "load_testing": true,
+      "stress_testing": false
+    }
+  },
+  "development": {
+    "debug_mode": false,
+    "hot_reload": false,
+    "profiling": false,
+    "development_tools": false
+  }
+}
