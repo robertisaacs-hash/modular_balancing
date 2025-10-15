@@ -265,19 +265,3 @@ def solve_optimization_problem(df_processed: pd.DataFrame):
         
         return fallback_df[existing_columns].reset_index(drop=True)
     
-def generate_reports(df_master_schedule: pd.DataFrame, df_suggested_schedule: pd.DataFrame):
-    """
-    Generates summary reports and visualizations.
-    """
-    print("--- Starting Reporting & Analysis ---")
-
-    # Ensure Suggested_WK_End_Date exists
-    if 'Suggested_WK_End_Date' not in df_suggested_schedule.columns:
-        print("⚠️ 'Suggested_WK_End_Date' not found, using 'WK_End_Date' as fallback")
-        if 'WK_End_Date' in df_suggested_schedule.columns:
-            df_suggested_schedule['Suggested_WK_End_Date'] = df_suggested_schedule['WK_End_Date']
-        else:
-            print("🚨 Cannot generate reports: No valid date columns found")
-            return
-
-    df_suggested_schedule['Suggested_WK_End_Date'] = pd.to_datetime(df_suggested_schedule['Suggested_WK_End_Date'])
