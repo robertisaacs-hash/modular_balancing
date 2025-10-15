@@ -199,3 +199,26 @@ def create_master_schedule(raw_data):
     df_master = calculate_cost_impact_analysis(df_relays)
     
     return df_master
+from src.enhanced_analytics import calculate_cost_impact_analysis
+
+def create_master_schedule(raw_data):
+    """Create comprehensive master schedule from raw data"""
+    df_relays = raw_data.get('df_relays', pd.DataFrame())
+    
+    # If no relay data, create mock structure for development
+    if df_relays.empty:
+        print("⚠️ No relay data found, generating mock data for development")
+        df_relays = pd.DataFrame({
+            'Relay_ID': [f'REL_{i:04d}' for i in range(100)],
+            'Store': [f'Store_{i%20 + 1:03d}' for i in range(100)],
+            'DeptCat': np.random.choice(['Grocery', 'Electronics', 'Clothing', 'Home', 'Pharmacy'], 100),
+            'Associate_Hours_Impact': np.random.uniform(4, 16, 100),
+            'Relay_Hours': np.random.uniform(8, 32, 100),
+            'WK_End_Date': pd.date_range(start='2024-01-01', periods=100, freq='W').strftime('%Y-%m-%d')
+        })
+    
+    # Apply cost and risk calculations
+    df_master = calculate_cost_impact_analysis(df_relays)
+    
+    print(f"✅ Created master schedule with {len(df_master)} relays")
+    return df_master
