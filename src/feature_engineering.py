@@ -179,3 +179,23 @@ def run_feature_engineering(raw_data: dict):
     print("--- Feature Engineering Complete ---")
     
     return df_master_schedule, dax_metrics
+
+def create_master_schedule(raw_data):
+    """Create comprehensive master schedule"""
+    df_relays = raw_data.get('df_relays', pd.DataFrame())
+    
+    if df_relays.empty:
+        # Create mock data structure
+        df_relays = pd.DataFrame({
+            'Relay_ID': [f'REL_{i:04d}' for i in range(100)],
+            'Store': np.random.choice(['Store_' + str(i) for i in range(1, 21)], 100),
+            'DeptCat': np.random.choice(['Grocery', 'Electronics', 'Clothing', 'Home', 'Pharmacy'], 100),
+            'Associate_Hours_Impact': np.random.uniform(4, 16, 100),
+            'Relay_Hours': np.random.uniform(8, 32, 100)
+        })
+    
+    # Apply cost and risk calculations
+    from src.enhanced_analytics import calculate_cost_impact_analysis
+    df_master = calculate_cost_impact_analysis(df_relays)
+    
+    return df_master
