@@ -136,7 +136,7 @@ modular_balancing/
 ### Step 1: Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone <https://github.com/robertisaacs-hash/modular_balancing.git>
 cd modular_balancing
 ```
 
