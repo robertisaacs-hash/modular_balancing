@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Relay Analysis Dashboard | Walmart</title>
+    
+    <!-- External Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVFiFtZc9aBRBFMd/M5vNJpvEJBqwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLGwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsQ==">
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Modular Relay Analysis Dashboard for optimizing store workload distribution and merchant request management">
+    <meta name="keywords" content="walmart, modular, relay, optimization, dashboard, analytics">
+    <meta name="author" content="Walmart Shrink Intelligence Team">
+</head>
+<body>
+    <!-- Status Indicator -->
+    <div id="status-bar" class="position-fixed top-0 end-0 p-2" style="z-index: 1050;">
+        <div id="connection-status" class="badge bg-success">
+            <span class="status-indicator status-active"></span>
+            Connected
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="last-updated" id="last-updated">
+                Last Updated: <span id="update-time">Loading...</span>
+            </div>
+            <h1 class="header-title">
+                <i class="fas fa-chart-line me-3"></i>
+                Modular Relay Analysis Dashboard
+            </h1>
+            <p class="header-subtitle">
+                <i class="fas fa-store me-2"></i>
+                Optimizing Store Operations Through Intelligent Relay Scheduling
+            </p>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" 
+                        type="button" role="tab" aria-controls="overview" aria-selected="true">
+                    <i class="fas fa-tachometer-alt me-2"></i>Executive Overview
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="merchant-tab" data-bs-toggle="tab" data-bs-target="#merchant" 
+                        type="button" role="tab" aria-controls="merchant" aria-selected="false">
+                    <i class="fas fa-user-tie me-2"></i>Merchant Analysis
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="optimization-tab" data-bs-toggle="tab" data-bs-target="#optimization" 
+                        type="button" role="tab" aria-controls="optimization" aria-selected="false">
+                    <i class="fas fa-cogs me-2"></i>Optimization Impact
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="predictive-tab" data-bs-toggle="tab" data-bs-target="#predictive" 
+                        type="button" role="tab" aria-controls="predictive" aria-selected="false">
+                    <i class="fas fa-crystal-ball me-2"></i>Predictive Insights
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="data-quality-tab" data-bs-toggle="tab" data-bs-target="#data-quality" 
+                        type="button" role="tab" aria-controls="data-quality" aria-selected="false">
+                    <i class="fas fa-database me-2"></i>Data Quality
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="dashboardTabContent">
+            
+            <!-- EXECUTIVE OVERVIEW TAB -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                
+                <!-- KPI Cards Row -->
+                <div class="row fade-in">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card cost">
+                            <h4><i class="fas fa-dollar-sign me-2"></i>Current Annual Impact</h4>
+                            <h2 id="total-cost">$0</h2>
+                            <div class="trend" id="cost-trend">
+                                <i class="fas fa-arrow-up"></i> vs last period
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card savings">
+                            <h4><i class="fas fa-piggy-bank me-2"></i>Optimization Savings</h4>
+                            <h2 id="potential-savings">$0</h2>
+                            <div class="trend positive" id="savings-trend">
+                                <i class="fas fa-arrow-down"></i> cost reduction
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card roi">
+                            <h4><i class="fas fa-percentage me-2"></i>ROI Potential</h4>
+                            <h2 id="roi-percentage">0%</h2>
+                            <div class="trend positive" id="roi-trend">
+                                <i class="fas fa-chart-line"></i> efficiency gain
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card requests">
+                            <h4><i class="fas fa-clipboard-list me-2"></i>Active Requests</h4>
+                            <h2 id="active-requests">0</h2>
+                            <div class="trend" id="requests-trend">
+                                <i class="fas fa-clock"></i> pending review
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Summary Alert -->
+                <div id="executive-alert" class="alert-custom alert-info slide-in-left" style="display: none;">
+                    <h5><i class="fas fa-info-circle me-2"></i>Executive Summary</h5>
+                    <p id="executive-summary-text">Loading insights...</p>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="chart-container slide-in-left">
+                            <h3 class="chart-title">
+                                <i class="fas fa-chart-area me-2"></i>Weekly Workload Distribution
+                            </h3>
+                            <div id="workload-forecast" class="loading">
+                                <span class="loading-text">Loading workload analysis...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="chart-container slide-in-right">
+                            <h3 class="chart-title">
+                                <i class="fas fa-chart-pie me-2"></i>Department Breakdown
+                            </h3>
+                            <div id="department-pie" class="loading">
+                                <span class="loading-text">Loading department data...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Tables Row -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="data-table slide-in-left">
+                            <h3 class="chart-title">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Top Risk Relays
+                            </h3>
+                            <div class="table-responsive">
+                                <table class="table" id="risk-relays-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Relay ID</th>
+                                            <th>Department</th>
+                                            <th>Risk Score</th>
+                                            <th>Cost Impact</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <div class="loading">
+                                                    <span class="loading-text">Loading risk analysis...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="data-table slide-in-right">
+                            <h3 class="chart-title">
+                                <i class="fas fa-store me-2"></i>Store Performance Summary
+                            </h3>
+                            <div class="table-responsive">
+                                <table class="table" id="store-performance-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Store ID</th>
+                                            <th>Total Cost</th>
+                                            <th>Risk Score</th>
+                                            <th>Relay Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <div class="loading">
+                                                    <span class="loading-text">Loading store data...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- MERCHANT ANALYSIS TAB -->
+            <div class="tab-pane fade" id="merchant" role="tabpanel" aria-labelledby="merchant-tab">
+                
+                <!-- Merchant Request Summary -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert-custom alert-warning">
+                            <h5><i class="fas fa-user-tie me-2"></i>Merchant Request Impact Analysis</h5>
+                            <p>Understanding the cost and operational impact of merchant-requested relay moves across stores and departments.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Status Cards -->
+                <div class="row" id="merchant-status-cards">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-hourglass-half me-2"></i>Pending Requests</h4>
+                            <h2 id="pending-requests">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-check-circle me-2"></i>Approved This Month</h4>
+                            <h2 id="approved-requests">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-times-circle me-2"></i>Rejected This Month</h4>
+                            <h2 id="rejected-requests">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-money-bill-wave me-2"></i>Request Cost Impact</h4>
+                            <h2 id="request-cost-impact">$0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Merchant Analysis Charts -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-sitemap me-2"></i>Request Reasons Analysis
+                            </h3>
+                            <div id="request-reasons-chart" class="loading">
+                                <span class="loading-text">Loading request analysis...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-calendar-alt me-2"></i>Request Frequency Trends
+                            </h3>
+                            <div id="request-frequency-chart" class="loading">
+                                <span class="loading-text">Loading frequency data...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Store Impact Heatmap -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-fire me-2"></i>Store-Level Cost Impact Heatmap
+                            </h3>
+                            <div id="store-impact-heatmap" class="loading">
+                                <span class="loading-text">Loading heatmap...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- OPTIMIZATION IMPACT TAB -->
+            <div class="tab-pane fade" id="optimization" role="tabpanel" aria-labelledby="optimization-tab">
+                
+                <!-- Optimization Summary -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert-custom alert-success">
+                            <h5><i class="fas fa-cogs me-2"></i>Optimization Results Summary</h5>
+                            <p>Impact analysis showing before and after optimization scenarios with workload balancing and cost reduction opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Before/After Comparison -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-balance-scale me-2"></i>Total Weekly Hours: Before vs After
+                            </h3>
+                            <div id="weekly-hours-comparison" class="loading">
+                                <span class="loading-text">Loading comparison...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-store-alt me-2"></i>Neighborhood Market Hours
+                            </h3>
+                            <div id="nm-hours-comparison" class="loading">
+                                <span class="loading-text">Loading NM analysis...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optimization Opportunities -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="data-table">
+                            <h3 class="chart-title">
+                                <i class="fas fa-lightbulb me-2"></i>Optimization Opportunities
+                            </h3>
+                            <div id="optimization-opportunities" class="loading">
+                                <span class="loading-text">Analyzing opportunities...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PREDICTIVE INSIGHTS TAB -->
+            <div class="tab-pane fade" id="predictive" role="tabpanel" aria-labelledby="predictive-tab">
+                
+                <!-- Predictive Summary -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert-custom alert-info">
+                            <h5><i class="fas fa-crystal-ball me-2"></i>Predictive Analytics & Forecasting</h5>
+                            <p>Machine learning insights to predict future relay moves and proactively manage merchant requests.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction Charts -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-chart-line me-2"></i>Move Risk Prediction Model
+                            </h3>
+                            <div id="risk-prediction-chart" class="loading">
+                                <span class="loading-text">Loading predictive model...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-calendar-week me-2"></i>Seasonal Patterns
+                            </h3>
+                            <div id="seasonal-patterns-chart" class="loading">
+                                <span class="loading-text">Loading seasonal data...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekly Forecast -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="data-table">
+                            <h3 class="chart-title">
+                                <i class="fas fa-calendar-alt me-2"></i>12-Week Workload Forecast
+                            </h3>
+                            <div class="table-responsive">
+                                <table class="table" id="weekly-forecast-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Week Ending</th>
+                                            <th>Projected Cost</th>
+                                            <th>Hours Required</th>
+                                            <th>Relay Count</th>
+                                            <th>Risk Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <div class="loading">
+                                                    <span class="loading-text">Loading forecast...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DATA QUALITY TAB -->
+            <div class="tab-pane fade" id="data-quality" role="tabpanel" aria-labelledby="data-quality-tab">
+                
+                <!-- Data Quality Summary -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert-custom alert-warning">
+                            <h5><i class="fas fa-database me-2"></i>Data Quality Assessment</h5>
+                            <p>Monitoring data completeness, accuracy, and consistency across all input sources to ensure reliable analysis.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Quality Metrics -->
+                <div class="row" id="data-quality-metrics">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-check-double me-2"></i>Data Completeness</h4>
+                            <h2 id="data-completeness">95%</h2>
+                            <div class="progress-custom">
+                                <div class="progress-bar-custom" id="completeness-bar" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-bullseye me-2"></i>Data Accuracy</h4>
+                            <h2 id="data-accuracy">98%</h2>
+                            <div class="progress-custom">
+                                <div class="progress-bar-custom" id="accuracy-bar" style="width: 98%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-sync me-2"></i>Data Freshness</h4>
+                            <h2 id="data-freshness">2h</h2>
+                            <div class="trend positive">
+                                <i class="fas fa-clock"></i> last refresh
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="metric-card">
+                            <h4><i class="fas fa-exclamation-triangle me-2"></i>Data Issues</h4>
+                            <h2 id="data-issues">3</h2>
+                            <div class="trend negative">
+                                <i class="fas fa-flag"></i> requiring attention
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Quality Charts -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-chart-bar me-2"></i>Missing Data by Source
+                            </h3>
+                            <div id="missing-data-chart" class="loading">
+                                <span class="loading-text">Loading data quality metrics...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <h3 class="chart-title">
+                                <i class="fas fa-chart-line me-2"></i>Data Volume Trends
+                            </h3>
+                            <div id="data-volume-chart" class="loading">
+                                <span class="loading-text">Loading volume trends...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Sources Status -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="data-table">
+                            <h3 class="chart-title">
+                                <i class="fas fa-server me-2"></i>Data Sources Status
+                            </h3>
+                            <div class="table-responsive">
+                                <table class="table" id="data-sources-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Source</th>
+                                            <th>Status</th>
+                                            <th>Last Update</th>
+                                            <th>Records</th>
+                                            <th>Quality Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Relay Schedule</td>
+                                            <td><span class="badge badge-success">Active</span></td>
+                                            <td>2 hours ago</td>
+                                            <td>2,547</td>
+                                            <td>
+                                                <div class="progress-custom">
+                                                    <div class="progress-bar-custom" style="width: 95%"></div>
+                                                </div>
+                                                95%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>MSA Data</td>
+                                            <td><span class="badge badge-success">Active</span></td>
+                                            <td>1 hour ago</td>
+                                            <td>1,832</td>
+                                            <td>
+                                                <div class="progress-custom">
+                                                    <div class="progress-bar-custom" style="width: 98%"></div>
+                                                </div>
+                                                98%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>BRA/MRA Requests</td>
+                                            <td><span class="badge badge-warning">Warning</span></td>
+                                            <td>4 hours ago</td>
+                                            <td>156</td>
+                                            <td>
+                                                <div class="progress-custom">
+                                                    <div class="progress-bar-custom" style="width: 87%"></div>
+                                                </div>
+                                                87%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Overactive Bridge</td>
+                                            <td><span class="badge badge-success">Active</span></td>
+                                            <td>30 minutes ago</td>
+                                            <td>892</td>
+                                            <td>
+                                                <div class="progress-custom">
+                                                    <div class="progress-bar-custom" style="width: 92%"></div>
+                                                </div>
+                                                92%
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Refresh Button -->
+    <button class="refresh-btn" id="refresh-data" title="Refresh All Data">
+        <i class="fas fa-sync-alt" id="refresh-icon"></i>
+    </button>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-none" 
+         style="background: rgba(0,0,0,0.7); z-index: 9999;">
+        <div class="d-flex align-items-center justify-content-center h-100">
+            <div class="text-center text-white">
+                <div class="loading mb-3">
+                    <span class="loading-text">Refreshing Dashboard Data...</span>
+                </div>
+                <p>Please wait while we update the latest information</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Global variables
+        let dashboardData = {};
+        let refreshInterval;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startAutoRefresh();
+            setupEventListeners();
+        });
+
+        function initializeDashboard() {
+            console.log('🚀 Initializing Modular Relay Dashboard...');
+            updateTimestamp();
+            loadAllData();
+        }
+
+        function startAutoRefresh() {
+            // Auto-refresh every 5 minutes
+            refreshInterval = setInterval(function() {
+                console.log('⏰ Auto-refreshing dashboard...');
+                loadAllData();
+            }, 300000);
+        }
+
+        function setupEventListeners() {
+            // Refresh button
+            document.getElementById('refresh-data').addEventListener('click', function() {
+                const icon = document.getElementById('refresh-icon');
+                icon.classList.add('fa-spin');
+                refreshData().finally(() => {
+                    icon.classList.remove('fa-spin');
+                });
+            });
+
+            // Tab change events
+            document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function(event) {
+                    const tabId = event.target.getAttribute('data-bs-target').replace('#', '');
+                    console.log(`📊 Switched to ${tabId} tab`);
+                    loadTabData(tabId);
+                });
+            });
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('update-time').textContent = now.toLocaleString();
+        }
+
+        function updateConnectionStatus(status) {
+            const statusElement = document.getElementById('connection-status');
+            const indicator = statusElement.querySelector('.status-indicator');
+            
+            if (status === 'connected') {
+                statusElement.className = 'badge bg-success';
+                statusElement.innerHTML = '<span class="status-indicator status-active"></span> Connected';
+            } else if (status === 'loading') {
+                statusElement.className = 'badge bg-warning';
+                statusElement.innerHTML = '<span class="status-indicator status-warning"></span> Loading...';
+            } else {
+                statusElement.className = 'badge bg-danger';
+                statusElement.innerHTML = '<span class="status-indicator status-error"></span> Error';
+            }
+        }
+
+        async function loadAllData() {
+            updateConnectionStatus('loading');
+            
+            try {
+                // Load executive summary first
+                await loadExecutiveSummary();
+                await loadCostAnalysis();
+                await loadTabData('overview');
+                
+                updateConnectionStatus('connected');
+                updateTimestamp();
+                console.log('✅ Dashboard data loaded successfully');
+                
+            } catch (error) {
+                console.error('❌ Error loading dashboard data:', error);
+                updateConnectionStatus('error');
+                showError('Failed to load dashboard data. Please try refreshing.');
+            }
+        }
+
+        async function loadExecutiveSummary() {
+            try {
+                const response = await fetch('/api/executive-summary');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                dashboardData.executive = data;
+                updateExecutiveMetrics(data);
+                
+            } catch (error) {
+                console.error('Error loading executive summary:', error);
+                showError('Failed to load executive summary');
+            }
+        }
+
+        async function loadCostAnalysis() {
+            try {
+                const response = await fetch('/api/cost-analysis');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                dashboardData.costs = data;
+                updateCostMetrics(data);
+                
+            } catch (error) {
+                console.error('Error loading cost analysis:', error);
+                showError('Failed to load cost analysis');
+            }
+        }
+
+        async function loadTabData(tabId) {
+            switch(tabId) {
+                case 'overview':
+                    await loadOverviewData();
+                    break;
+                case 'merchant':
+                    await loadMerchantData();
+                    break;
+                case 'optimization':
+                    await loadOptimizationData();
+                    break;
+                case 'predictive':
+                    await loadPredictiveData();
+                    break;
+                case 'data-quality':
+                    await loadDataQualityData();
+                    break;
+            }
+        }
+
+        async function loadOverviewData() {
+            try {
+                // Load risk relays
+                const riskResponse = await fetch('/api/top-risk-relays');
+                const riskData = await riskResponse.json();
+                updateRiskRelaysTable(riskData);
+
+                // Load store performance
+                const storeResponse = await fetch('/api/store-performance');
+                const storeData = await storeResponse.json();
+                updateStorePerformanceTable(storeData);
+
+                // Load department breakdown
+                const deptResponse = await fetch('/api/department-breakdown');
+                const deptData = await deptResponse.json();
+                updateDepartmentChart(deptData);
+
+            } catch (error) {
+                console.error('Error loading overview data:', error);
+            }
+        }
+
+        async function loadMerchantData() {
+            try {
+                const response = await fetch('/api/merchant-analysis');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update merchant charts
+                Object.keys(data).forEach(chartKey => {
+                    const element = document.getElementById(`${chartKey.replace('_', '-')}-chart`);
+                    if (element) {
+                        Plotly.newPlot(element, JSON.parse(data[chartKey]).data, 
+                                     JSON.parse(data[chartKey]).layout, {responsive: true});
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading merchant data:', error);
+            }
+        }
+
+        async function loadOptimizationData() {
+            try {
+                const response = await fetch('/api/optimization-impact');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update optimization charts
+                Object.keys(data).forEach(chartKey => {
+                    const element = document.getElementById(`${chartKey.replace('_', '-')}-chart`);
+                    if (element) {
+                        Plotly.newPlot(element, JSON.parse(data[chartKey]).data, 
+                                     JSON.parse(data[chartKey]).layout, {responsive: true});
+                    }
+                });
+                
+                // Load optimization opportunities
+                const oppResponse = await fetch('/api/optimization-opportunities');
+                const oppData = await oppResponse.json();
+                updateOptimizationOpportunities(oppData);
+                
+            } catch (error) {
+                console.error('Error loading optimization data:', error);
+            }
+        }
+
+        async function loadPredictiveData() {
+            try {
+                const response = await fetch('/api/predictive-insights');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update predictive charts
+                Object.keys(data).forEach(chartKey => {
+                    const element = document.getElementById(`${chartKey.replace('_', '-')}-chart`);
+                    if (element) {
+                        Plotly.newPlot(element, JSON.parse(data[chartKey]).data, 
+                                     JSON.parse(data[chartKey]).layout, {responsive: true});
+                    }
+                });
+
+                // Load weekly forecast
+                const forecastResponse = await fetch('/api/weekly-forecast');
+                const forecastData = await forecastResponse.json();
+                updateWeeklyForecastTable(forecastData);
+                
+            } catch (error) {
+                console.error('Error loading predictive data:', error);
+            }
+        }
+
+        async function loadDataQualityData() {
+            try {
+                const response = await fetch('/api/data-quality');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update data quality charts
+                Object.keys(data).forEach(chartKey => {
+                    const element = document.getElementById(`${chartKey.replace('_', '-')}-chart`);
+                    if (element) {
+                        Plotly.newPlot(element, JSON.parse(data[chartKey]).data, 
+                                     JSON.parse(data[chartKey]).layout, {responsive: true});
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading data quality data:', error);
+            }
+        }
+
+        function updateExecutiveMetrics(data) {
+            // Update executive summary alert
+            const alertElement = document.getElementById('executive-alert');
+            const summaryText = document.getElementById('executive-summary-text');
+            
+            if (data.summary) {
+                summaryText.textContent = data.summary;
+                alertElement.style.display = 'block';
+            }
+        }
+
+        function updateCostMetrics(data) {
+            // Format currency values
+            const formatCurrency = (value) => {
+                if (value >= 1000000) {
+                    return `$${(value / 1000000).toFixed(1)}M`;
+                } else if (value >= 1000) {
+                    return `$${(value / 1000).toFixed(0)}K`;
+                } else {
+                    return `$${value.toFixed(0)}`;
+                }
+            };
+
+            // Update metric cards
+            document.getElementById('total-cost').textContent = formatCurrency(data.baseline_cost || 0);
+            document.getElementById('potential-savings').textContent = formatCurrency(data.savings || 0);
+            document.getElementById('roi-percentage').textContent = `${(data.roi_percentage || 0).toFixed(1)}%`;
+            document.getElementById('active-requests').textContent = data.active_requests || '0';
+        }
+
+        function updateRiskRelaysTable(data) {
+            const tbody = document.querySelector('#risk-relays-table tbody');
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No high-risk relays identified</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.slice(0, 10).map(relay => `
+                <tr>
+                    <td><strong>${relay.Relay_ID || 'N/A'}</strong></td>
+                    <td>${relay.DeptCat || 'N/A'}</td>
+                    <td>
+                        <span class="badge ${relay.Move_Risk_Score > 7 ? 'badge-danger' : relay.Move_Risk_Score > 4 ? 'badge-warning' : 'badge-success'}">
+                            ${(relay.Move_Risk_Score || 0).toFixed(1)}
+                        </span>
+                    </td>
+                    <td>$${(relay.Total_Move_Cost || 0).toFixed(0)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStorePerformanceTable(data) {
+            const tbody = document.querySelector('#store-performance-table tbody');
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No store performance data available</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.slice(0, 10).map(store => `
+                <tr>
+                    <td><strong>${store.Store_ID || 'N/A'}</strong></td>
+                    <td>$${(store.Total_Cost || 0).toFixed(0)}</td>
+                    <td>${(store.Avg_Risk_Score || 0).toFixed(1)}</td>
+                    <td>${store.Relay_Count || 0}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateDepartmentChart(data) {
+            if (!data || data.length === 0) return;
+
+            const chartData = [{
+                values: data.map(d => d.Total_Move_Cost_sum || 0),
+                labels: data.map(d => d.DeptCat || 'Unknown'),
+                type: 'pie',
+                marker: {
+                    colors: ['#004c91', '#0071ce', '#ffc220', '#ff6900', '#667eea', '#764ba2']
+                }
+            }];
+
+            const layout = {
+                title: 'Cost Distribution by Department',
+                showlegend: true,
+                height: 400
+            };
+
+            Plotly.newPlot('department-pie', chartData, layout, {responsive: true});
+        }
+
+        function updateWeeklyForecastTable(data) {
+            const tbody = document.querySelector('#weekly-forecast-table tbody');
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No forecast data available</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.slice(0, 12).map(week => {
+                const riskLevel = week.Projected_Cost > 50000 ? 'High' : week.Projected_Cost > 25000 ? 'Medium' : 'Low';
+                const riskClass = riskLevel === 'High' ? 'badge-danger' : riskLevel === 'Medium' ? 'badge-warning' : 'badge-success';
+                
+                return `
+                    <tr>
+                        <td>${week.WK_End_Date || 'N/A'}</td>
+                        <td>$${(week.Projected_Cost || 0).toFixed(0)}</td>
+                        <td>${(week.Hours_Required || 0).toFixed(0)} hrs</td>
+                        <td>${week.Relay_Count || 0}</td>
+                        <td><span class="badge ${riskClass}">${riskLevel}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateOptimizationOpportunities(data) {
+            const container = document.getElementById('optimization-opportunities');
+            
+            if (!data || !data.opportunities || data.opportunities.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted">No optimization opportunities identified</div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="row">
+                    ${data.opportunities.map(opp => `
+                        <div class="col-md-6 mb-3">
+                            <div class="alert-custom alert-info">
+                                <h6><i class="fas fa-lightbulb me-2"></i>${opp.title}</h6>
+                                <p>${opp.description}</p>
+                                <small class="text-muted">Potential Savings: $${(opp.savings || 0).toFixed(0)}</small>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        async function refreshData() {
+            document.getElementById('loading-overlay').classList.remove('d-none');
+            
+            try {
+                const response = await fetch('/api/refresh-data', { method: 'POST' });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    await loadAllData();
+                    showSuccess('Dashboard data refreshed successfully');
+                } else {
+                    throw new Error(result.message);
+                }
+                
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                showError('Failed to refresh data. Please try again.');
+            } finally {
+                document.getElementById('loading-overlay').classList.add('d-none');
+            }
+        }
+
+        function showError(message) {
+            // Create toast notification
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            toast.innerHTML = `
+                <strong>Error!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            // Create toast notification
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            toast.innerHTML = `
+                <strong>Success!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+
+        // Handle visibility change (pause refresh when tab is hidden)
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                if (!refreshInterval) {
+                    startAutoRefresh();
+                }
+            } else {
+                if (refreshInterval) {
+                    clearInterval(refreshInterval);
+                    refreshInterval = null;
+                }
+            }
+        });
+
+    </script>
+
+</body>
+</html>
