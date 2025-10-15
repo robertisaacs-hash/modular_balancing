@@ -79,22 +79,18 @@ def run_full_pipeline(use_mock_data=False, skip_ingestion=False, skip_optimizati
     # --- 4. Optimization ---
     
     df_suggested_schedule = None
-    if skip_optimization:
-        print("Skipping optimization solver, attempting to load last optimized schedule from GCS...")
-        try:
-            df_suggested_schedule = load_from_gcs_pickle(f"{GCS_MODELS_PATH}optimized_schedule.pkl")
-            if df_suggested_schedule.empty:
-                print("⚠️ No optimized schedule found. Using master schedule as a stand-in for reporting.")
-                df_suggested_schedule = df_master_schedule.copy()
-        except Exception as e:
-            print(f"⚠️ Error loading optimized schedule from GCS: {e}. Using master schedule as a stand-in for reporting.")
-            df_suggested_schedule = df_master_schedule.copy()
-    else:
+    if not skip_optimization:
         df_suggested_schedule = solve_optimization_problem(df_master_schedule)
-        if df_suggested_schedule is None or df_suggested_schedule.empty:
+        if df_suggested_schedule.empty:
             print("⚠️ Optimization failed or returned an empty schedule. Using master schedule as a stand-in for reporting.")
             df_suggested_schedule = df_master_schedule.copy()
-
+            # Add the missing column for reporting
+            df_suggested_schedule['Suggested_WK_End_Date'] = df_suggested_schedule['WK_End_Date']
+    else:
+        print("⚠️ Skipping optimization step. Using master schedule as stand-in.")
+        df_suggested_schedule = df_master_schedule.copy()
+        # Add the missing column for reporting
+        df_suggested_schedule['Suggested_WK_End_Date'] = df_suggested_schedule['WK_End_Date']
     # --- 5. Reporting ---
     
     if df_suggested_schedule is None or df_suggested_schedule.empty:
